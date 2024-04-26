@@ -21,7 +21,6 @@ public class ItemStackMixin {
             if (self.getDamageValue() < self.getMaxDamage()) {
                 //if we aren't going to break, ignore the damage. useful for manually doing damage on death.
                 cir.setReturnValue(false);
-
             }
         }
     }

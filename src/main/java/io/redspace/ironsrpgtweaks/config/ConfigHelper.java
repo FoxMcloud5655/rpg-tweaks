@@ -7,6 +7,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PotionItem;
 
 import java.util.Set;
 
@@ -50,6 +51,17 @@ public class ConfigHelper {
     }
 
     public static class Hunger {
+        public static double useDurationMultiplier(Item item) {
+            if (ServerConfigs.HUNGER_MODULE_ENABLED.get()) {
+                if (item.isEdible()) {
+                    return ServerConfigs.EAT_TIME_MULTIPLIER.get();
+                } else if (item instanceof PotionItem) {
+                    return ServerConfigs.POTION_DRINK_TIME_MULTIPLER.get();
+                }
+            }
+            return 1.0;
+        }
+
         public static boolean disableVanillaHunger() {
             return ServerConfigs.HUNGER_DISABLED.get() && ServerConfigs.HUNGER_MODULE_ENABLED.get();
         }

@@ -28,7 +28,7 @@ public class XpServerEvents {
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        if (event.getEntity() instanceof ServerPlayer serverPlayer && shouldCreateCatalyst(serverPlayer.getLevel())) {
+        if (!event.isEndConquered() && event.getEntity() instanceof ServerPlayer serverPlayer && shouldCreateCatalyst(serverPlayer.getLevel())) {
             serverPlayer.setExperienceLevels(0);
             serverPlayer.setExperiencePoints(0);
         }

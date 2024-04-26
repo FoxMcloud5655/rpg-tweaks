@@ -51,6 +51,8 @@ public class ServerConfigs {
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> FOOD_STACK_BLACKLIST;
     public static final ForgeConfigSpec.ConfigValue<Double> SPLASH_POTION_COOLDOWN;
     public static final ForgeConfigSpec.ConfigValue<Double> LINGERING_POTION_COOLDOWN;
+    public static final ForgeConfigSpec.ConfigValue<Double> EAT_TIME_MULTIPLIER;
+    public static final ForgeConfigSpec.ConfigValue<Double> POTION_DRINK_TIME_MULTIPLER;
 
 
 //    public static final ForgeConfigSpec.ConfigValue<Boolean> XP_DROP_REWARD_XP;
@@ -136,6 +138,10 @@ public class ServerConfigs {
         SPLASH_POTION_COOLDOWN = BUILDER.define("splashPotionCooldown", 0.5);
         BUILDER.comment("Item Cooldown in seconds when throwing a lingering potion. Default: 1.5");
         LINGERING_POTION_COOLDOWN = BUILDER.define("lingeringPotionCooldown", 1.5);
+        BUILDER.comment("Multiplier to the time taken to eat food. Default: 1.2");
+        EAT_TIME_MULTIPLIER = BUILDER.define("eatTimeMultiplier", 1.2);
+        BUILDER.comment("Multiplier to the time taken to drink potions. Default: 0.8");
+        POTION_DRINK_TIME_MULTIPLER = BUILDER.define("potionDrinkTimeMultiplier", 0.8);
         BUILDER.pop();
 
 
