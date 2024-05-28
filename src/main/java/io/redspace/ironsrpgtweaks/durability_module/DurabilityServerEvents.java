@@ -47,7 +47,7 @@ public class DurabilityServerEvents {
     private static void damageItems(List<ItemStack> items, ServerPlayer serverPlayer) {
         items.forEach((itemstack) -> {
             //IronsRpgTweaks.LOGGER.debug("{}", itemstack.getHoverName().getString());
-            if (itemstack.isDamageableItem()) {
+            if (itemstack.isDamageableItem() && !ServerConfigs.DURABILITY_DEATH_MODE_BLACKLIST_ITEMS.contains(itemstack.getItem()) && (ServerConfigs.DURABILITY_DEATH_MODE_WHITELIST_ITEMS.isEmpty() || ServerConfigs.DURABILITY_DEATH_MODE_WHITELIST_ITEMS.contains(itemstack.getItem()))) {
                 int i = itemstack.getEnchantmentLevel(Enchantments.UNBREAKING) + 1;
                 int damageAmount = (int) (itemstack.getMaxDamage() * ServerConfigs.DURABILITY_LOST_ON_DEATH.get()) + ServerConfigs.ADDITIONAL_DURABILITY_LOST_ON_DEATH.get();
                 damageAmount /= i;
@@ -64,7 +64,7 @@ public class DurabilityServerEvents {
                         //TODO: sounds/particles of non-mainhand items too
                         player.sendSystemMessage(Component.translatable("ui.irons_rpg_tweaks.item_broken", itemName.withStyle(Style.EMPTY.withColor(ChatFormatting.RED).withItalic(false))).setStyle(Style.EMPTY.withColor(ChatFormatting.RED).withItalic(true)));
                         if (itemstack.getItem() instanceof ArmorItem armorItem) {
-                            player.broadcastBreakEvent(armorItem.getSlot());
+                            player.broadcastBreakEvent(armorItem.getEquipmentSlot());
                         } else {
                             player.broadcastBreakEvent(EquipmentSlot.MAINHAND);
                         }

@@ -20,6 +20,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -47,6 +48,7 @@ public class IronsRpgTweaks
         LootRegistry.register(modEventBus);
 
         modEventBus.addListener(this::fillCreativeTabs);
+        modEventBus.addListener(this::onConfigReload);
         //modEventBus.addListener(CommonHungerEvents::changeStackSize);
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -57,8 +59,14 @@ public class IronsRpgTweaks
     public void onServerStarting(ServerStartingEvent event) {
     }
 
+    public void onConfigReload(ModConfigEvent.Reloading event){
+        if(event.getConfig().getType() == ModConfig.Type.SERVER){
+            ServerConfigs.onConfigReload();
+        }
+    }
+
     public void fillCreativeTabs(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTab() == BuiltInRegistries.f_279662_.get(CreativeModeTabs.f_256869_))
+        if (event.getTab() == BuiltInRegistries.CREATIVE_MODE_TAB.get(CreativeModeTabs.TOOLS_AND_UTILITIES) && ServerConfigs.ENCHANT_MODULE_ENABLED.get())
             event.accept(ItemRegistry.IDENTIFICATION_SCROLL::get);
     }
 

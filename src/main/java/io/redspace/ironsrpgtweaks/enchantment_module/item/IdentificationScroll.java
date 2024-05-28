@@ -1,4 +1,4 @@
-package io.redspace.ironsrpgtweaks.item;
+package io.redspace.ironsrpgtweaks.enchantment_module.item;
 
 import io.redspace.ironsrpgtweaks.enchantment_module.EnchantHelper;
 import net.minecraft.ChatFormatting;

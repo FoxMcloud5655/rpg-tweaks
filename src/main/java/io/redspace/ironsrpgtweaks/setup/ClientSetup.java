@@ -1,13 +1,8 @@
 package io.redspace.ironsrpgtweaks.setup;
 
 import io.redspace.ironsrpgtweaks.IronsRpgTweaks;
-import io.redspace.ironsrpgtweaks.entity.XpCatalystRenderer;
+import io.redspace.ironsrpgtweaks.xp_module.entity.XpCatalystRenderer;
 import io.redspace.ironsrpgtweaks.registry.EntityRegistry;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.geom.LayerDefinitions;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

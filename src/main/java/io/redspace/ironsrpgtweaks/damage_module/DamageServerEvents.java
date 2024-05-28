@@ -39,7 +39,7 @@ public class DamageServerEvents {
     @SubscribeEvent
     public static void onPlayerAttack(AttackEntityEvent event) {
         var player = event.getEntity();
-        if (player.getLevel().isClientSide) {
+        if (player.level().isClientSide) {
             return;
         }
         if (player.getAttackStrengthScale(0) < ServerConfigs.MINIMUM_ATTACK_STRENGTH.get()) {

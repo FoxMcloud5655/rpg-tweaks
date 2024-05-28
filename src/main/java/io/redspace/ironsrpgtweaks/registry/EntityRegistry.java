@@ -1,11 +1,10 @@
 package io.redspace.ironsrpgtweaks.registry;
 
 import io.redspace.ironsrpgtweaks.IronsRpgTweaks;
-import io.redspace.ironsrpgtweaks.entity.XpCatalyst;
+import io.redspace.ironsrpgtweaks.xp_module.entity.XpCatalyst;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

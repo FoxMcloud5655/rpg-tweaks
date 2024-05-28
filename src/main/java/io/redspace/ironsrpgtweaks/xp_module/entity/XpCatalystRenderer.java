@@ -1,4 +1,4 @@
-package io.redspace.ironsrpgtweaks.entity;
+package io.redspace.ironsrpgtweaks.xp_module.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -20,7 +20,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import org.checkerframework.checker.units.qual.A;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
@@ -79,9 +78,9 @@ public class XpCatalystRenderer extends EntityRenderer<XpCatalyst> {
         Vec3 orbGradient1 = green.add((yellow.subtract(green)).scale(orbColorPeriod));
         Vec3 orbGradient2 = white.add((purple.subtract(white)).scale(orbColorPeriod));
         Vec3 orbGradient3 = orbGradient1.add((orbGradient2.subtract(orbGradient1)).scale(colorPeriod));
-        poseStack.m_252781_(Axis.f_252529_.m_252977_(swirlX * .45f));
-        poseStack.m_252781_(Axis.f_252436_.m_252977_(swirlY * .45f));
-        poseStack.m_252781_(Axis.f_252403_.m_252977_(swirlZ * .45f));
+        poseStack.mulPose(Axis.XP.rotationDegrees(swirlX * .45f));
+        poseStack.mulPose(Axis.YP.rotationDegrees(swirlY * .45f));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(swirlZ * .45f));
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(SOLID_TEXTURE));
         this.orb.render(poseStack, consumer, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, (float) orbGradient3.x, (float) orbGradient3.y, (float) orbGradient3.z, 1f);
         poseStack.popPose();
@@ -89,17 +88,17 @@ public class XpCatalystRenderer extends EntityRenderer<XpCatalyst> {
 
         consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(entity)));
 
-        poseStack.m_252781_(Axis.f_252529_.m_252977_(swirlX));
-        poseStack.m_252781_(Axis.f_252436_.m_252977_(swirlY));
-        poseStack.m_252781_(Axis.f_252403_.m_252977_(swirlZ));
+        poseStack.mulPose(Axis.XP.rotationDegrees(swirlX));
+        poseStack.mulPose(Axis.YP.rotationDegrees(swirlY));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(swirlZ));
 
         Vec3 rimGradient = green.add((yellow.subtract(green)).scale(colorPeriod));
         Vec3 rimGradientInverted = green.add((yellow.subtract(green)).scale(1 - colorPeriod));
         this.orb.render(poseStack, consumer, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, (float) rimGradient.x, (float) rimGradient.y, (float) rimGradient.z, 1f);
 
-        poseStack.m_252781_(Axis.f_252529_.m_252977_(swirlZ));
-        poseStack.m_252781_(Axis.f_252436_.m_252977_(swirlX));
-        poseStack.m_252781_(Axis.f_252403_.m_252977_(swirlY));
+        poseStack.mulPose(Axis.XP.rotationDegrees(swirlZ));
+        poseStack.mulPose(Axis.YP.rotationDegrees(swirlX));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(swirlY));
 
         poseStack.scale(1.5f, 1.5f, 1.5f);
         this.swirl.render(poseStack, consumer, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, (float) rimGradientInverted.x, (float) rimGradientInverted.y, (float) rimGradientInverted.z, 1f);
@@ -130,15 +129,15 @@ public class XpCatalystRenderer extends EntityRenderer<XpCatalyst> {
         int l = (int) ((Mth.sin(f8 + 4.1887903F) + 1.0F) * 0.1F * 255.0F);
         pMatrixStack.translate(0.0D, (double) 0.1F, 0.0D);
         //camera orientation
-        pMatrixStack.m_252781_(this.entityRenderDispatcher.m_253208_());
-        //pMatrixStack.m_252781_(Axis.YP.m_252977_(180.0F));
-        pMatrixStack.m_252781_(Axis.f_252436_.m_252977_(180.0F));
+        pMatrixStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+        //pMatrixStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+        pMatrixStack.mulPose(Axis.YP.rotationDegrees(180.0F));
         float f9 = 0.3F;
         pMatrixStack.scale(0.3F, 0.3F, 0.3F);
         VertexConsumer vertexconsumer = pBuffer.getBuffer(RENDER_TYPE);
         PoseStack.Pose posestack$pose = pMatrixStack.last();
-        Matrix4f matrix4f = posestack$pose.m_252922_();
-        Matrix3f matrix3f = posestack$pose.m_252943_();
+        Matrix4f matrix4f = posestack$pose.pose();
+        Matrix3f matrix3f = posestack$pose.normal();
         vertex(vertexconsumer, matrix4f, matrix3f, -0.5F, -.75F, j, 255, l, f, f3, LightTexture.FULL_BRIGHT);
         vertex(vertexconsumer, matrix4f, matrix3f, 0.5F, -.75F, j, 255, l, f1, f3, LightTexture.FULL_BRIGHT);
         vertex(vertexconsumer, matrix4f, matrix3f, 0.5F, 0.25F, j, 255, l, f1, f2, LightTexture.FULL_BRIGHT);

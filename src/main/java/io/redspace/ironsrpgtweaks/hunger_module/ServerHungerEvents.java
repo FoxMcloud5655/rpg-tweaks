@@ -23,7 +23,7 @@ public class ServerHungerEvents {
             player.getFoodData().setFoodLevel(canSprint ? 10 : 5);
 
             int i = ServerConfigs.NATURAL_REGENERATION_TICK_RATE.get();
-            if (player.tickCount % i == 0 && player.getLevel().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION) && !player.getCombatTracker().inCombat)
+            if (player.tickCount % i == 0 && player.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION) && !player.getCombatTracker().inCombat)
                 player.heal(1);
         }
     }

@@ -43,7 +43,7 @@ public class EnchantHelper {
         if (shouldHideEnchantments(stack)) {
             stack.getOrCreateTag().putBoolean(hideEnchantsNBT, false);
             if (entity != null && ServerConfigs.ENCHANT_MODULE_ENABLED.get()) {
-                entity.getLevel().playSound(null, entity, SoundRegistry.IDENTIFY.get(), SoundSource.PLAYERS, 1f, 1f);
+                entity.level().playSound(null, entity, SoundRegistry.IDENTIFY.get(), SoundSource.PLAYERS, 1f, 1f);
             }
         }
     }

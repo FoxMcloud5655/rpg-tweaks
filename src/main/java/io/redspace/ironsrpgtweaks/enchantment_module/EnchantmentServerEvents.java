@@ -29,7 +29,7 @@ public class EnchantmentServerEvents {
 
     @SubscribeEvent
     public static void disableEnchantmentTableInteract(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getEntity() instanceof ServerPlayer serverPlayer && event.getEntity().getLevel().getBlockState(event.getHitVec().getBlockPos()).is(Blocks.ENCHANTING_TABLE) && ServerConfigs.ENCHANT_MODULE_ENABLED.get()) {
+        if (event.getEntity() instanceof ServerPlayer serverPlayer && event.getEntity().level().getBlockState(event.getHitVec().getBlockPos()).is(Blocks.ENCHANTING_TABLE) && ServerConfigs.ENCHANT_MODULE_ENABLED.get()) {
 
             boolean canceled = ServerConfigs.DISABLE_ENCHANTING_TABLE.get();
             Component message = Component.translatable("ui.irons_rpg_tweaks.enchanting_table_error.disabled").withStyle(ChatFormatting.RED);

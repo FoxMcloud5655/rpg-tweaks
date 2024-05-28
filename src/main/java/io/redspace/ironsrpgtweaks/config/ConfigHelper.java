@@ -21,6 +21,12 @@ public class ConfigHelper {
             if (mode == VanillaDurabilityMode.NONE) {
                 return false;
             }
+            if (ServerConfigs.DURABILITY_VANILLA_MODE_BLACKLIST_ITEMS.contains(itemStack.getItem())) {
+                return false;
+            }
+            if (!ServerConfigs.DURABILITY_VANILLA_MODE_WHITELIST_ITEMS.isEmpty()) {
+                return ServerConfigs.DURABILITY_VANILLA_MODE_WHITELIST_ITEMS.contains(itemStack.getItem());
+            }
             if (mode == VanillaDurabilityMode.ALL) {
                 return true;
             }

@@ -1,15 +1,22 @@
 package io.redspace.ironsrpgtweaks.config;
 
+import io.redspace.ironsrpgtweaks.IronsRpgTweaks;
 import io.redspace.ironsrpgtweaks.damage_module.DamageServerEvents;
 import io.redspace.ironsrpgtweaks.damage_module.PlayerDamageMode;
 import io.redspace.ironsrpgtweaks.durability_module.DeathDurabilityMode;
 import io.redspace.ironsrpgtweaks.durability_module.VanillaDurabilityMode;
 import io.redspace.ironsrpgtweaks.hunger_module.CommonHungerEvents;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ServerConfigs {
 
@@ -27,9 +34,17 @@ public class ServerConfigs {
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> DURABILITY_MODULE_ENABLED;
     public static final ForgeConfigSpec.ConfigValue<VanillaDurabilityMode> DURABILITY_VANILLA_MODE;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DURABILITY_VANILLA_MODE_WHITELIST;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DURABILITY_VANILLA_MODE_BLACKLIST;
     public static final ForgeConfigSpec.ConfigValue<DeathDurabilityMode> DURABILITY_DEATH_MODE;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DURABILITY_DEATH_MODE_WHITELIST;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DURABILITY_DEATH_MODE_BLACKLIST;
     public static final ForgeConfigSpec.ConfigValue<Double> DURABILITY_LOST_ON_DEATH;
     public static final ForgeConfigSpec.ConfigValue<Integer> ADDITIONAL_DURABILITY_LOST_ON_DEATH;
+    public static final Set<Item> DURABILITY_VANILLA_MODE_WHITELIST_ITEMS = new HashSet<>();
+    public static final Set<Item> DURABILITY_VANILLA_MODE_BLACKLIST_ITEMS = new HashSet<>();
+    public static final Set<Item> DURABILITY_DEATH_MODE_WHITELIST_ITEMS = new HashSet<>();
+    public static final Set<Item> DURABILITY_DEATH_MODE_BLACKLIST_ITEMS = new HashSet<>();
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> XP_MODULE_ENABLED;
     public static final ForgeConfigSpec.ConfigValue<Boolean> XP_IGNORE_KEEPINVENTORY;
@@ -84,8 +99,16 @@ public class ServerConfigs {
         DURABILITY_MODULE_ENABLED = BUILDER.define("durabilityModuleEnabled", true);
         BUILDER.comment("What type of gear should take vanilla durability damage. Default: NONE");
         DURABILITY_VANILLA_MODE = BUILDER.defineEnum("vanillDurabilityGearType", VanillaDurabilityMode.NONE);
+        BUILDER.comment("If specified, the only items or item tags to take vanilla durability damage");
+        DURABILITY_VANILLA_MODE_WHITELIST = BUILDER.defineList("vanillaDurabilityWhitelist", List.of(), x -> true);
+        BUILDER.comment("If specified, these items or item tags never take vanilla durability damage");
+        DURABILITY_VANILLA_MODE_BLACKLIST = BUILDER.defineList("vanillaDurabilityBlacklist", List.of(), x -> true);
         BUILDER.comment("What type of gear is damaged upon death. Default: ALL");
         DURABILITY_DEATH_MODE = BUILDER.defineEnum("deathGearType", DeathDurabilityMode.ALL);
+        BUILDER.comment("If specified, the only items or item tags to take durability damage on death");
+        DURABILITY_DEATH_MODE_WHITELIST = BUILDER.defineList("deathDurabilityWhitelist", List.of(), x -> true);
+        BUILDER.comment("If specified, these items or item tags never take durability damage on death");
+        DURABILITY_DEATH_MODE_BLACKLIST = BUILDER.defineList("deathDurabilityBlacklist", List.of(), x -> true);
         BUILDER.comment("The percent of durability damage equipment should take on player dying. Set to 0 to disable. Default: 0.15 (15%)");
         DURABILITY_LOST_ON_DEATH = BUILDER.define("durabilityLostOnDeath", 0.15);
         BUILDER.comment("An additional constant amount of damage taken on death. This makes items with a high max durability degrade relatively slower. Set to 0 to disable. Default: 25");
@@ -146,6 +169,41 @@ public class ServerConfigs {
 
 
         SPEC = BUILDER.build();
+    }
+
+    public static void onConfigReload() {
+        IronsRpgTweaks.LOGGER.debug("On Config Reload");
+
+        cacheItemList(DURABILITY_VANILLA_MODE_WHITELIST.get(), DURABILITY_VANILLA_MODE_WHITELIST_ITEMS);
+        cacheItemList(DURABILITY_VANILLA_MODE_BLACKLIST.get(), DURABILITY_VANILLA_MODE_BLACKLIST_ITEMS);
+        cacheItemList(DURABILITY_DEATH_MODE_WHITELIST.get(), DURABILITY_DEATH_MODE_WHITELIST_ITEMS);
+        cacheItemList(DURABILITY_DEATH_MODE_BLACKLIST.get(), DURABILITY_DEATH_MODE_BLACKLIST_ITEMS);
+        IronsRpgTweaks.LOGGER.debug("DURABILITY_VANILLA_MODE_WHITELIST: {} {}",DURABILITY_VANILLA_MODE_WHITELIST.get(), DURABILITY_VANILLA_MODE_WHITELIST_ITEMS);
+        IronsRpgTweaks.LOGGER.debug("DURABILITY_VANILLA_MODE_BLACKLIST: {} {}",DURABILITY_VANILLA_MODE_BLACKLIST.get(), DURABILITY_VANILLA_MODE_BLACKLIST_ITEMS);
+        IronsRpgTweaks.LOGGER.debug("DURABILITY_DEATH_MODE_WHITELIST: {} {}",DURABILITY_DEATH_MODE_WHITELIST.get(), DURABILITY_DEATH_MODE_WHITELIST_ITEMS);
+        IronsRpgTweaks.LOGGER.debug("DURABILITY_DEATH_MODE_BLACKLIST: {} {}",DURABILITY_DEATH_MODE_BLACKLIST.get(), DURABILITY_DEATH_MODE_BLACKLIST_ITEMS);
+
+    }
+
+    private static void cacheItemList(List<? extends String> ids, Set<Item> output) {
+        output.clear();
+        for (String name : ids) {
+            try {
+                if (name.startsWith("#")) {
+                    var tag = new TagKey<Item>(Registries.ITEM, new ResourceLocation(name.substring(1)));
+                    output.addAll(ForgeRegistries.ITEMS.getValues().stream().filter(item -> item.builtInRegistryHolder().is(tag)).toList());
+                } else {
+                    var item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(name));
+                    if (item != null) {
+                        output.add(item);
+                    } else {
+                        IronsRpgTweaks.LOGGER.warn("Unable to add item to config, no such item id: {}", name);
+                    }
+                }
+            } catch (Exception e) {
+                IronsRpgTweaks.LOGGER.warn("Unable to validate item config: {}", e.getMessage());
+            }
+        }
     }
 
     private static boolean validateEntityName(final Object obj) {

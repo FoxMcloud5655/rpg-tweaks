@@ -1,6 +1,5 @@
-package io.redspace.ironsrpgtweaks.entity;
+package io.redspace.ironsrpgtweaks.xp_module.entity;
 
-import io.redspace.ironsrpgtweaks.IronsRpgTweaks;
 import io.redspace.ironsrpgtweaks.config.ServerConfigs;
 import io.redspace.ironsrpgtweaks.registry.EntityRegistry;
 import io.redspace.ironsrpgtweaks.registry.SoundRegistry;
@@ -42,7 +41,7 @@ public class XpCatalyst extends Entity {
     public static XpCatalyst createXpCatalyst(ServerPlayer deadPlayer) {
         if (deadPlayer.experienceLevel == 0 && deadPlayer.experienceProgress == 0)
             return null;
-        XpCatalyst xpCatalyst = new XpCatalyst(deadPlayer.getLevel());
+        XpCatalyst xpCatalyst = new XpCatalyst(deadPlayer.level());
         //xpCatalyst.storedLevels = deadPlayer.experienceLevel;
         //xpCatalyst.storedPoints = (int) (deadPlayer.experienceProgress * deadPlayer.getXpNeededForNextLevel());
         xpCatalyst.storedXp = (int) (deadPlayer.experienceProgress * deadPlayer.getXpNeededForNextLevel());
@@ -52,7 +51,7 @@ public class XpCatalyst extends Entity {
         }
         xpCatalyst.ownerUUID = deadPlayer.getUUID();
         xpCatalyst.setPos(deadPlayer.position().add(0, .75, 0));
-        deadPlayer.getLevel().addFreshEntity(xpCatalyst);
+        deadPlayer.level().addFreshEntity(xpCatalyst);
         return xpCatalyst;
     }
 
@@ -70,13 +69,13 @@ public class XpCatalyst extends Entity {
 
     @Override
     public void tick() {
-        if (getLevel().isClientSide) {
-            getLevel().addParticle(ParticleTypes.TOTEM_OF_UNDYING, getRandomX(.125f), getRandomY(), getRandomZ(.125f), 0, 0.07, 0);
+        if (level().isClientSide) {
+            level().addParticle(ParticleTypes.TOTEM_OF_UNDYING, getRandomX(.125f), getRandomY(), getRandomZ(.125f), 0, 0.07, 0);
         }
         if (firstTick) {
             firstTick = false;
         }
-        checkOutOfWorld();
+        this.checkBelowWorld();
     }
 
     @Override
