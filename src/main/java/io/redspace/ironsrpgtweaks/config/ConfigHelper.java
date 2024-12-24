@@ -1,5 +1,6 @@
 package io.redspace.ironsrpgtweaks.config;
 
+import io.redspace.ironsrpgtweaks.IronsRpgTweaks;
 import io.redspace.ironsrpgtweaks.durability_module.DeathDurabilityMode;
 import io.redspace.ironsrpgtweaks.durability_module.VanillaDurabilityMode;
 import net.minecraft.world.entity.Entity;
@@ -14,22 +15,28 @@ import java.util.Set;
 public class ConfigHelper {
     public static class Durability {
         public static boolean shouldTakeVanillaDamage(ItemStack itemStack) {
+            IronsRpgTweaks.LOGGER.debug("shouldTakeVanillaDamage: {}", itemStack);
             if (!ServerConfigs.DURABILITY_MODULE_ENABLED.get()) {
                 return true;
             }
             var mode = ServerConfigs.DURABILITY_VANILLA_MODE.get();
             if (mode == VanillaDurabilityMode.NONE) {
+                IronsRpgTweaks.LOGGER.debug("mode = VanillaDurabilityMode.NONE: false");
                 return false;
             }
             if (ServerConfigs.DURABILITY_VANILLA_MODE_BLACKLIST_ITEMS.contains(itemStack.getItem())) {
+                IronsRpgTweaks.LOGGER.debug("item is blacklisted: false");
                 return false;
             }
             if (!ServerConfigs.DURABILITY_VANILLA_MODE_WHITELIST_ITEMS.isEmpty()) {
+                IronsRpgTweaks.LOGGER.debug("items are whitelisted: ServerConfigs.DURABILITY_VANILLA_MODE_WHITELIST_ITEMS.contains(itemStack.getItem()): {}", ServerConfigs.DURABILITY_VANILLA_MODE_WHITELIST_ITEMS.contains(itemStack.getItem()));
                 return ServerConfigs.DURABILITY_VANILLA_MODE_WHITELIST_ITEMS.contains(itemStack.getItem());
             }
             if (mode == VanillaDurabilityMode.ALL) {
+                IronsRpgTweaks.LOGGER.debug("mode == VanillaDurabilityMode.ALL: true");
                 return true;
             }
+            IronsRpgTweaks.LOGGER.debug("is armor/tool: {}: {}", mode, itemStack.getItem() instanceof ArmorItem ? mode == VanillaDurabilityMode.ARMOR : mode == VanillaDurabilityMode.TOOLS);
             return itemStack.getItem() instanceof ArmorItem ? mode == VanillaDurabilityMode.ARMOR : mode == VanillaDurabilityMode.TOOLS;
         }
 
@@ -48,7 +55,8 @@ public class ConfigHelper {
             if (!ServerConfigs.DURABILITY_MODULE_ENABLED.get()) {
                 return false;
             }
-            return (!shouldTakeDeathDamage(itemStack) || ServerConfigs.ADDITIONAL_DURABILITY_LOST_ON_DEATH.get() == 0 && ServerConfigs.DURABILITY_LOST_ON_DEATH.get() == 0) && (!shouldTakeVanillaDamage(itemStack));
+            return (!shouldTakeDeathDamage(itemStack) || (ServerConfigs.ADDITIONAL_DURABILITY_LOST_ON_DEATH.get() == 0 && ServerConfigs.DURABILITY_LOST_ON_DEATH.get() == 0))
+                    && (!shouldTakeVanillaDamage(itemStack));
         }
     }
 
