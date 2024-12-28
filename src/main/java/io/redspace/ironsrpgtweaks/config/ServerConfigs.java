@@ -61,6 +61,7 @@ public class ServerConfigs {
     public static final ForgeConfigSpec.ConfigValue<Boolean> HUNGER_DISABLED;
     public static final ForgeConfigSpec.ConfigValue<Double> FOOD_TO_HEALTH_MODIFIER;
     public static final ForgeConfigSpec.ConfigValue<Integer> NATURAL_REGENERATION_TICK_RATE;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> NATURAL_REGENERATION_DURING_COMBAT;
     public static final ForgeConfigSpec.ConfigValue<Integer> POTION_STACK_SIZE_OVERRIDE;
     public static final ForgeConfigSpec.ConfigValue<Integer> FOOD_STACK_SIZE_OVERRIDE;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> FOOD_STACK_BLACKLIST;
@@ -150,6 +151,8 @@ public class ServerConfigs {
         FOOD_TO_HEALTH_MODIFIER = BUILDER.define("foodToHealthModifier", 0.5);
         BUILDER.comment("The amount of time, in ticks, between players naturally regenerating 1 hp. 1 second is 20 ticks. Turn off the naturalRegeneration gamerule to disable. Default: 250.");
         NATURAL_REGENERATION_TICK_RATE = BUILDER.define("naturalRegenerationTickRate", 250);
+        BUILDER.comment("Whether players should naturally regenerate hp during combat. Turn off the naturalRegeneration gamerule to disable. Default: false.");
+        NATURAL_REGENERATION_DURING_COMBAT = BUILDER.define("naturalRegenerationDuringCombat", false);
         BUILDER.comment("Changes the stack size of potions. Set to 0 to disable. Requires game restart. Default: 4");
         POTION_STACK_SIZE_OVERRIDE = BUILDER.define("potionStackSize", 4);
         BUILDER.comment("Limit the stack size of every food item. Set to 0 to disable. Requires game restart. Default: 0");

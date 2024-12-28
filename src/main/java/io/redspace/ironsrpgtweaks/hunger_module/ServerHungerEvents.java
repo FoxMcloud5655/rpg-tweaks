@@ -3,7 +3,6 @@ package io.redspace.ironsrpgtweaks.hunger_module;
 import io.redspace.ironsrpgtweaks.config.ConfigHelper;
 import io.redspace.ironsrpgtweaks.config.ServerConfigs;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,8 +22,8 @@ public class ServerHungerEvents {
             player.getFoodData().setFoodLevel(canSprint ? 10 : 5);
 
             int i = ServerConfigs.NATURAL_REGENERATION_TICK_RATE.get();
-            if (player.tickCount % i == 0 && player.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION) && !player.getCombatTracker().inCombat)
                 player.heal(1);
+                if (player.tickCount % i == 0 && player.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION) && (ServerConfigs.NATURAL_REGENERATION_DURING_COMBAT.get() || !player.getCombatTracker().inCombat))
         }
     }
 }
