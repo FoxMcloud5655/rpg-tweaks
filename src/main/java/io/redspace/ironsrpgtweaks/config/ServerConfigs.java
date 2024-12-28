@@ -73,7 +73,6 @@ public class ServerConfigs {
 //    public static final ForgeConfigSpec.ConfigValue<Boolean> XP_DROP_REWARD_XP;
 
     static {
-
         BUILDER.push("Damage-Module");
         BUILDER.comment("The purpose of the damage module is to remove the invulnerability ticks after an entity is damaged to better suit gameplay where entities are going to be ignoring too much damage if left unchecked. Disabling will nullify every feature listed under this module.");
         DAMAGE_MODULE_ENABLED = BUILDER.define("damageModuleEnabled", true);
@@ -83,7 +82,7 @@ public class ServerConfigs {
         BUILDER.comment("damagesourceBlacklist default: " + getDefaultEntries(DamageServerEvents.BLACKLIST_DAMAGE_SOURCES));
         DAMAGE_MODULE_DAMAGE_SOURCE_BLACKLIST = BUILDER.defineList("damagesourceBlacklist", DamageServerEvents.BLACKLIST_DAMAGE_SOURCES, (x) -> true);
         BUILDER.comment("Invulnerability Tick (I-Frame) count. Default: 0 (Vanilla's is 20, one second)");
-        IFRAME_COUNT = BUILDER.define("invulnerabilityTickCount", 0);
+        IFRAME_COUNT = BUILDER.worldRestart().define("invulnerabilityTickCount", 0);
         BUILDER.comment("Specialized handling for player damage ticks. \"ALL\" means there is no special handling, \"ONLY_LIVING\" means only living attacks ignore player i-frames (may help with unforeseen damage like potions), and \"NONE\" means player's damage ticks are unaffected by the damage module.");
         PLAYER_DAMAGE_MODE = BUILDER.defineEnum("playerDamageMode", PlayerDamageMode.ALL);
         BUILDER.comment("In order to prevent spam attacks, a minimum threshold of attack strength can be set before an attack can deal damage. Default: 0.75");
