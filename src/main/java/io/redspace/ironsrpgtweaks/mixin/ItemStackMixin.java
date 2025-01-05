@@ -17,11 +17,13 @@ public class ItemStackMixin {
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true)
     public void cancelDurabilityUsage(int pAmount, RandomSource pRandom, @Nullable ServerPlayer pUser, CallbackInfoReturnable<Boolean> cir) {
         var self = (ItemStack) (Object) this;
-        if (!ConfigHelper.Durability.shouldTakeVanillaDamage(self)) {
-            if (self.getDamageValue() < self.getMaxDamage()) {
-                //if we aren't going to break, ignore the damage. useful for manually doing damage on death.
-                cir.setReturnValue(false);
-            }
+        if (ConfigHelper.Durability.shouldTakeVanillaDamage(self)) {
+            // if we still want vanilla damage functionality, stop
+            return;
+        }
+        // if the full damage will break the item, let it pass so the game automatically handles the item breaking pipeline. otherwise, cancel damage
+        if (self.getDamageValue() < self.getMaxDamage()) {
+            cir.setReturnValue(false);
         }
     }
 

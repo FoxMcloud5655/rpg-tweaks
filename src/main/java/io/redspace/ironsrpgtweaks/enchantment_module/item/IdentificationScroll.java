@@ -1,6 +1,6 @@
 package io.redspace.ironsrpgtweaks.enchantment_module.item;
 
-import io.redspace.ironsrpgtweaks.enchantment_module.EnchantHelper;
+import io.redspace.ironsrpgtweaks.enchantment_module.EnchantModuleHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -48,8 +48,8 @@ public class IdentificationScroll extends Item {
 //    }
 
     private boolean attemptIdentifyItem(ItemStack itemStack, Player player) {
-        if (EnchantHelper.shouldHideEnchantments(itemStack)) {
-            EnchantHelper.unhideEnchantments(itemStack, player);
+        if (EnchantModuleHelper.shouldHideEnchantments(itemStack)) {
+            EnchantModuleHelper.unhideEnchantments(itemStack, player);
             return true;
         }
         return false;

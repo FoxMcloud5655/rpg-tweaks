@@ -28,14 +28,13 @@ import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(IronsRpgTweaks.MODID)
-public class IronsRpgTweaks
-{
+public class IronsRpgTweaks {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "irons_rpg_tweaks";
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
-    public IronsRpgTweaks()
-    {
+
+    public IronsRpgTweaks() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfigs.SPEC, String.format("%s-server.toml", IronsRpgTweaks.MODID));
@@ -61,9 +60,17 @@ public class IronsRpgTweaks
     public void onServerStarting(ServerStartingEvent event) {
     }
 
-    public void onConfigReload(ModConfigEvent.Reloading event){
-        if(event.getConfig().getType() == ModConfig.Type.SERVER){
-            ServerConfigs.onConfigReload();
+    @SubscribeEvent
+    public void onConfigReload(ModConfigEvent.Reloading event) {
+        if (event.getConfig().getType() == ModConfig.Type.SERVER) {
+            ServerConfigs.handleOnConfigReload();
+        }
+    }
+
+    @SubscribeEvent
+    public void onConfigLoad(ModConfigEvent.Loading event) {
+        if (event.getConfig().getType() == ModConfig.Type.SERVER) {
+            ServerConfigs.handleOnConfigReload();
         }
     }
 

@@ -18,7 +18,7 @@ public class ServerHungerEvents {
     // If we modify the food in post, it should always be the same by the time it gets back to ServerPlayer. Therefore, no packet spamming
     @SubscribeEvent
     public static void setHunger(TickEvent.PlayerTickEvent event) {
-        if (ConfigHelper.Hunger.disableVanillaHunger() && event.phase == TickEvent.Phase.END && event.side == LogicalSide.SERVER) {
+        if (ConfigHelper.Hunger.shouldDisableVanillaHunger() && event.phase == TickEvent.Phase.END && event.side == LogicalSide.SERVER) {
             var player = event.player;
             var canSprint = !event.player.hasEffect(MobEffects.HUNGER);
             player.getFoodData().setFoodLevel(canSprint ? 10 : 5);
