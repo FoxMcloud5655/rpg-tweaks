@@ -25,7 +25,7 @@ public class ServerHungerEvents {
 
             if (Double.compare(player.getAttributeValue(NATURAL_REGEN_SPEED.get()), 0.0D) > 0) {
                 int i = (int)(ServerConfigs.NATURAL_REGENERATION_TICK_RATE.get() / player.getAttributeValue(NATURAL_REGEN_SPEED.get()));
-                if (player.tickCount % i == 0 && player.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION) && (ServerConfigs.NATURAL_REGENERATION_DURING_COMBAT.get() || !player.getCombatTracker().inCombat))
+                if ((i <= 1 || player.tickCount % i == 0) && player.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION) && (ServerConfigs.NATURAL_REGENERATION_DURING_COMBAT.get() || !player.getCombatTracker().inCombat))
                     player.heal((float)player.getAttributeValue(NATURAL_REGEN_AMOUNT.get()));
             }
         }
