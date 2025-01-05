@@ -1,6 +1,7 @@
 package io.redspace.ironsrpgtweaks.durability_module;
 
 import io.redspace.ironsrpgtweaks.IronsRpgTweaks;
+import io.redspace.ironsrpgtweaks.config.ConfigHelper;
 import io.redspace.ironsrpgtweaks.config.ServerConfigs;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -45,9 +46,9 @@ public class DurabilityServerEvents {
     }
 
     private static void damageItems(List<ItemStack> items, ServerPlayer serverPlayer) {
-        items.forEach((itemstack) -> {
+        for (ItemStack itemstack : items) {
             //IronsRpgTweaks.LOGGER.debug("{}", itemstack.getHoverName().getString());
-            if (itemstack.isDamageableItem() && !ServerConfigs.DURABILITY_DEATH_MODE_BLACKLIST_ITEMS.contains(itemstack.getItem()) && (ServerConfigs.DURABILITY_DEATH_MODE_WHITELIST_ITEMS.isEmpty() || ServerConfigs.DURABILITY_DEATH_MODE_WHITELIST_ITEMS.contains(itemstack.getItem()))) {
+            if (itemstack.isDamageableItem() && ConfigHelper.Durability.shouldTakeDeathDamage(itemstack)) {
                 int i = itemstack.getEnchantmentLevel(Enchantments.UNBREAKING) + 1;
                 int damageAmount = (int) (itemstack.getMaxDamage() * ServerConfigs.DURABILITY_LOST_ON_DEATH.get()) + ServerConfigs.ADDITIONAL_DURABILITY_LOST_ON_DEATH.get();
                 damageAmount /= i;
@@ -71,18 +72,21 @@ public class DurabilityServerEvents {
                     });
                 }
             }
-        });
+        }
+        ;
     }
 
     private static List<ItemStack> getHotbarItems(Inventory inventory) {
         List<ItemStack> hotbarItems = new ArrayList<>();
         for (int i = 0; i < inventory.getContainerSize() && i < 9; i++) {
             var item = inventory.getItem(i);
-            if (!item.isEmpty())
+            if (!item.isEmpty()) {
                 hotbarItems.add(item);
+            }
         }
-        if (!inventory.offhand.get(0).isEmpty())
+        if (!inventory.offhand.get(0).isEmpty()) {
             hotbarItems.add(inventory.offhand.get(0));
+        }
         return hotbarItems;
     }
 

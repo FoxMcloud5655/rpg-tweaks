@@ -3,7 +3,6 @@ package io.redspace.ironsrpgtweaks.enchantment_module;
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.redspace.ironsrpgtweaks.IronsRpgTweaks;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -26,9 +25,9 @@ public class HideEnchantsLootModifier extends LootModifier {
         //TODO: blacklist loot tables config
         //IronsRpgTweaks.LOGGER.debug("HideEnchantsLootModifier: RUNNING");
         for (ItemStack itemStack : generatedLoot) {
-            var enchants = EnchantHelper.getEnchantments(itemStack);
+            var enchants = EnchantModuleHelper.getEnchantments(itemStack);
             if (enchants != null){
-                EnchantHelper.hideEnchantments(itemStack);
+                EnchantModuleHelper.hideEnchantments(itemStack);
             }
         }
         return generatedLoot;

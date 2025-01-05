@@ -27,10 +27,10 @@ public class EnchantmentClientEvents {
         if (!ServerConfigs.ENCHANT_MODULE_ENABLED.get())
             return;
         ItemStack stack = event.getItemStack();
-        ListTag enchants = EnchantHelper.getEnchantments(stack);
+        ListTag enchants = EnchantModuleHelper.getEnchantments(stack);
         var tooltipComponents = event.getToolTip();
         if (enchants != null) {
-            if (EnchantHelper.shouldHideEnchantments(stack)) {
+            if (EnchantModuleHelper.shouldHideEnchantments(stack)) {
                 for (int e = 0; e < enchants.size(); e++) {
                     CompoundTag compoundtag = enchants.getCompound(e);
                     Enchantment enchantment = ForgeRegistries.ENCHANTMENTS.getValue(EnchantmentHelper.getEnchantmentId(compoundtag));

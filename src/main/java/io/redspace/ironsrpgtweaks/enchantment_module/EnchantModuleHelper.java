@@ -1,22 +1,16 @@
 package io.redspace.ironsrpgtweaks.enchantment_module;
 
-import io.redspace.ironsrpgtweaks.config.ConfigHelper;
 import io.redspace.ironsrpgtweaks.config.ServerConfigs;
 import io.redspace.ironsrpgtweaks.registry.SoundRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
-public class EnchantHelper {
+public class EnchantModuleHelper {
 
     public static final String hideEnchantsNBT = "hideEnchantments";
     public static boolean shouldHideEnchantments(ItemStack stack) {

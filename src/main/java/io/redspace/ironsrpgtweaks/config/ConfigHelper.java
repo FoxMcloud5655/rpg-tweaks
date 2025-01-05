@@ -19,11 +19,7 @@ public class ConfigHelper {
             if (!ServerConfigs.DURABILITY_MODULE_ENABLED.get()) {
                 return true;
             }
-            var mode = ServerConfigs.DURABILITY_VANILLA_MODE.get();
-            if (mode == VanillaDurabilityMode.NONE) {
-                IronsRpgTweaks.LOGGER.debug("mode = VanillaDurabilityMode.NONE: false");
-                return false;
-            }
+            // Check whitelist/blacklist before "mode == NONE" because mitigating user error is more important than critical perfection
             if (ServerConfigs.DURABILITY_VANILLA_MODE_BLACKLIST_ITEMS.contains(itemStack.getItem())) {
                 IronsRpgTweaks.LOGGER.debug("item is blacklisted: false");
                 return false;
@@ -31,6 +27,11 @@ public class ConfigHelper {
             if (!ServerConfigs.DURABILITY_VANILLA_MODE_WHITELIST_ITEMS.isEmpty()) {
                 IronsRpgTweaks.LOGGER.debug("items are whitelisted: ServerConfigs.DURABILITY_VANILLA_MODE_WHITELIST_ITEMS.contains(itemStack.getItem()): {}", ServerConfigs.DURABILITY_VANILLA_MODE_WHITELIST_ITEMS.contains(itemStack.getItem()));
                 return ServerConfigs.DURABILITY_VANILLA_MODE_WHITELIST_ITEMS.contains(itemStack.getItem());
+            }
+            var mode = ServerConfigs.DURABILITY_VANILLA_MODE.get();
+            if (mode == VanillaDurabilityMode.NONE) {
+                IronsRpgTweaks.LOGGER.debug("mode = VanillaDurabilityMode.NONE: false");
+                return false;
             }
             if (mode == VanillaDurabilityMode.ALL) {
                 IronsRpgTweaks.LOGGER.debug("mode == VanillaDurabilityMode.ALL: true");
@@ -44,7 +45,19 @@ public class ConfigHelper {
             if (!ServerConfigs.DURABILITY_MODULE_ENABLED.get()) {
                 return false;
             }
-            var mode = ServerConfigs.DURABILITY_DEATH_MODE.get();
+            // Check whitelist/blacklist before "mode == NONE" because mitigating user error is more important than critical perfection
+            if (ServerConfigs.DURABILITY_DEATH_MODE_BLACKLIST_ITEMS.contains(itemStack.getItem())) {
+                IronsRpgTweaks.LOGGER.debug("item is blacklisted: false");
+                return false;
+            }
+            if (!ServerConfigs.DURABILITY_DEATH_MODE_WHITELIST_ITEMS.isEmpty()) {
+                IronsRpgTweaks.LOGGER.debug("items are whitelisted: ServerConfigs.DURABILITY_VANILLA_MODE_WHITELIST_ITEMS.contains(itemStack.getItem()): {}", ServerConfigs.DURABILITY_VANILLA_MODE_WHITELIST_ITEMS.contains(itemStack.getItem()));
+                return ServerConfigs.DURABILITY_DEATH_MODE_WHITELIST_ITEMS.contains(itemStack.getItem());
+            }
+            DeathDurabilityMode mode = ServerConfigs.DURABILITY_DEATH_MODE.get();
+            if (mode == DeathDurabilityMode.NONE) {
+                return false;
+            }
             if (mode == DeathDurabilityMode.ALL) {
                 return true;
             }
@@ -76,7 +89,7 @@ public class ConfigHelper {
             return 1.0;
         }
 
-        public static boolean disableVanillaHunger() {
+        public static boolean shouldDisableVanillaHunger() {
             return ServerConfigs.HUNGER_DISABLED.get() && ServerConfigs.HUNGER_MODULE_ENABLED.get();
         }
 

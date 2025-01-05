@@ -12,7 +12,7 @@ public class ClientHungerEvents {
 
     @SubscribeEvent
     public static void disableHunger(RenderGuiOverlayEvent.Pre event) {
-        if (event.getOverlay() == VanillaGuiOverlay.FOOD_LEVEL.type() && ConfigHelper.Hunger.disableVanillaHunger())
+        if (event.getOverlay() == VanillaGuiOverlay.FOOD_LEVEL.type() && ConfigHelper.Hunger.shouldDisableVanillaHunger())
             event.setCanceled(true);
     }
 }
